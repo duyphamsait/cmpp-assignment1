@@ -5,7 +5,7 @@
 */
 
 import { Token } from "./token.js";
-import { TokenType, DELIMITERS } from "./constants.js";
+import { TokenType, DELIMITERS, KEYWORDS } from "./constants.js";
 import { SemanticError } from "./errors.js";
 
 // The Lexer reads each character from input string and groups them into token.
@@ -30,6 +30,10 @@ export class Lexer {
 
   isSpace(ch) {
     return ch === " " || ch === "\t" || ch === "\n" || ch === "\r";
+  }
+
+  isAlpha(ch) {
+    return (ch >= "a" && ch <= "z") || (ch >= "A" && ch <= "Z");
   }
 
   currentCharacter() {
@@ -78,6 +82,35 @@ export class Lexer {
     return tokenArray;
   }
 
+  readWord(startIndex) {
+    let text = "";
+    const chars = [];
+
+    while (this.isAlpha(this.currentCharacter())) {
+      const c = this.nextCharacter();
+      chars.push(c);
+      text += c;
+    }
+
+    // Convert to lowercase
+    const key = text.toLowerCase();
+
+    // check keyword exists
+    const keywordType = KEYWORDS[key];
+    if (!keywordType) {
+      throw new SemanticError(`Unknown keyword '${text}'`, startIndex);
+    }
+
+    const token = new Token(keywordType, text, startIndex);
+
+    if (this.debug) {
+      this.lexicalCharacterArray.push(chars.join(" "));
+      this.lexicalGroupArray.push(text);
+    }
+
+    return token;
+  }
+
   // Get the next token from the input.
   getNextToken() {
     this.skipSpaces();
@@ -100,8 +133,19 @@ export class Lexer {
     }
 
     // number (integer only)
-    if (ch >= "0" && ch <= "9") {
+    if (this.isDigit(ch)) {
       return this.readInteger(startIndex);
+    }
+
+    // Keywords (sytax is: count)
+    if (this.isAlpha(ch)) {
+      return this.readWord(startIndex);
+    }
+
+    // division operator
+    if (ch === "/") {
+      this.nextCharacter();
+      return new Token(TokenType.SLASH, "/", startIndex);
     }
 
     // reject float dot explicitly (nice message)
