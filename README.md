@@ -135,11 +135,11 @@ const result = new Parser(tokens, DEBUG).parse();
 
 The program handles:
 
-Lexical Errors: invalid characters, unknown identifiers, floating-point numbers.
+- Lexical Errors: invalid characters, unknown identifiers, floating-point numbers.
 
-Syntax Errors: missing brackets, missing parentheses, incorrect commas, invalid token order, missing count keyword.
+- Syntax Errors: missing brackets, missing parentheses, incorrect commas, invalid token order, missing count keyword.
 
-Semantic Errors: empty list, mismatch between the left list and count(...).
+- Semantic Errors: empty list, mismatch between the left list and count(...).
 
 ------------------------------------------------------------------------
 
@@ -149,7 +149,7 @@ Semantic Errors: empty list, mismatch between the left list and count(...).
     https://www.geeksforgeeks.org/compiler-design/introduction-of-lexical-analysis/
 
 2.  University of Toronto. Parsing -- Recursive Descent Parser Notes.\
-    https://www.cs.utoronto.ca/\~trebla/CSCC24-latest/08-parsing.html
+    https://www.cs.utoronto.ca/~trebla/CSCC24-latest/08-parsing.html
 
 3.  McGill University. Abstract Syntax Trees (AST) -- CS520 Slides.\
-    https://www.cs.mcgill.ca/\~cs520/2021/slides/7-ast.pdf
+    https://www.cs.mcgill.ca/~cs520/2020/slides/4-ast.pdf
