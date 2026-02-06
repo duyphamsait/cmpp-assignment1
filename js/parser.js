@@ -1,7 +1,7 @@
 import { TokenType } from "./constants.js";
 import { DELIMITERS } from "./constants.js";
 import { SyntaxError } from "./errors.js";
-import { NumberNode, ListNode } from "./ast.js";
+import { NumberNode, ListNode, CountNode, DivisionNode } from "./ast.js";
 
 // The Parser checks if the token sequence follows the grammar rules.
 export class Parser {
@@ -46,73 +46,54 @@ export class Parser {
 
   // check syntax [2,3,4]/count(2,3,4)
   parseListDivideByCount() {
-    // start with [
-    this.expectToken(TokenType.LBRACK, "Expected '['");
+    // Parse the primary list (Dividend). Like parsing [2,3,4]
+    const leftList = this.parseListExpr();
 
-    const elements = [];
-
-    if (this.peek().type === TokenType.RBRACK) {
-      // end parse sub list
-      this.expectToken(TokenType.RBRACK, "Expected ']'");
-      return new ListNode(elements);
-    }
-
-    // parse and check number, then instert to elements array
-    elements.push(this.parseElement());
-
-    while (this.peek().type === TokenType.COMMA) {
-      this.expectToken(TokenType.COMMA, "Expected ','");
-      elements.push(this.parseElement());
-    }
-
-    // end with ]
-    this.expectToken(TokenType.RBRACK, "Expected ']'");
-
-    // check division operator
+    // Expect the division operator '/'
     this.expectToken(TokenType.SLASH, "Expected '/'");
 
-    // check keyword count
+    // Expect 'count' keyword
     this.expectToken(TokenType.COUNT, "Expected 'count'");
-  
-    // start with (
+
+    // Expect opening parenthesis '('
     this.expectToken(TokenType.LPAREN, "Expected '('");
 
-    // parse and check number, then instert to elements array
-    elements.push(this.parseElement());
-
-    while (this.peek().type === TokenType.COMMA) {
-      this.expectToken(TokenType.COMMA, "Expected ','");
-      elements.push(this.parseElement());
-    }
-
-    // end with )
+    // Parse the list inside count function (Divisor).Like parsing [2,3,4]
+    const countList = this.parseListExpr();
+    
+    // Expect closing parenthesis ')'
     this.expectToken(TokenType.RPAREN, "Expected ')'");
 
-    return new ListNode(elements);
+    // CountNode for the AST
+    const rightList = new CountNode(countList);
+
+    // Create AST tree
+    return new DivisionNode(leftList, rightList);
   }
   
   // check syntax [2,3,4]
   parseListExpr() {
-    // start with [
+    // Start parsing with the opening bracket '['
     this.expectToken(TokenType.LBRACK, "Expected '['");
 
     const elements = [];
 
+    // Handle empty list: []
     if (this.peek().type === TokenType.RBRACK) {
-      // end parse sub list
       this.expectToken(TokenType.RBRACK, "Expected ']'");
       return new ListNode(elements);
     }
 
-    // parse and check number, then instert to elements array
+    // Parse element and add it to the elements
     elements.push(this.parseElement());
 
+    // Continue parsing when meeting commas ','
     while (this.peek().type === TokenType.COMMA) {
       this.expectToken(TokenType.COMMA, "Expected ','");
       elements.push(this.parseElement());
     }
 
-        // end with ]
+    // Complete parsing with the closing bracket ']'
     this.expectToken(TokenType.RBRACK, "Expected ']'");
     return new ListNode(elements);
   }

@@ -3,22 +3,42 @@
 <head>
   <meta charset="utf-8" />
   <title>Average Calculator</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 16px; }
-    textarea { width: 100%; font-family: monospace; }
-    pre { background: #111; color: #eee; padding: 12px; white-space: pre-wrap; }
-  </style>
+  <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-  <h2>Finding the Average (Integers Only)</h2>
+  <div class="container">
+    <h2>Average Calculator</h2>
 
-  <textarea id="code" rows="3">[5, 8, 12, 4, 10]/count(</textarea>
-  <br><br>
-  <button id="runBtn">Run</button>
+    <label for="testCases">Select a Test Case:</label>
+    <select id="testCases" onchange="loadTestCase()">
+        <option value="" disabled selected>-- Choose a scenario --</option>
+        <option value="[5, 10, 15] / count([5, 10, 15])">Standard Match (Success)</option>
+        <option value="[] / count([])">Empty List (Semantic Error)</option>        
+        <option value="[2, 4, 6] / count([2, 4])">Error: Mismatch Length</option>
+        <option value="[10, 20] / count([10, 25])">Error: Mismatch Value</option>        
+        <option value="[5, abc, 10] / count([5, abc, 10])">Error: Unknown Keyword (abc)</option>
+        <option value="[5, 8.5, 10] / count([5, 8.5, 10])">Error: Float Not Allowed (8.5)</option>
+        <option value="[10, 20] / calculate([10, 20])">Error: Wrong Keyword (calculate)</option>
+        <option value="[10, 20] / 2">Error: Missing 'count' function</option>    </select>
 
-  <h3>Output</h3>
-  <pre id="output"></pre>
+    <label for="code">Input Expression:</label>
+    <textarea id="code" rows="4">[5, 8, 12, 4, 10]/count([5, 8, 12, 4, 10])</textarea>
+    
+    <button id="runBtn">Execute AST Analysis</button>
 
+    <h3>Output Terminal</h3>
+    <pre id="output">Results will appear here...</pre>
+  </div>
+
+  <script>
+    function loadTestCase() {
+      const select = document.getElementById('testCases');
+      const textarea = document.getElementById('code');
+      if (select.value) {
+        textarea.value = select.value;
+      }
+    }
+  </script>
   <script type="module" src="./js/main.js"></script>
 </body>
 </html>

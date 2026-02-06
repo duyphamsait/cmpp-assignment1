@@ -11,3 +11,16 @@ export class ListNode {
     this.elements = elements;
   }
 }
+
+export class CountNode {
+  constructor(list) {
+    this.list = list; 
+  }
+}
+
+export class DivisionNode {
+  constructor(left, right) {
+    this.left = left; 
+    this.right = right; 
+  }
+}
