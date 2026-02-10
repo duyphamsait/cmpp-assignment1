@@ -24,7 +24,7 @@ export class Parser {
     const token = this.peek();
 
     if (this.debug) 
-      this.log(`check syntax: expect ${type}, got ${token.type} '${token.lexeme}' Position${token.pos}`);
+      this.log(`check syntax: expect ${type}, got ${token.type} '${token.lexeme}' Position ${token.pos}`);
 
     if (token.type !== type) {
       throw new SyntaxError(
