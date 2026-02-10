@@ -120,16 +120,16 @@ Lexical -> ( | 5 | , | 1 0 | , | 1 5 | ) | / | 3
 Group   -> ( | 5 | , | 10 | , | 15 | ) | / | 3
 Token   -> LPAREN NUMBER COMMA NUMBER COMMA NUMBER RPAREN SLASH NUMBER
 
-    check syntax: expect LPAREN, got LPAREN '(' Position0
-    check syntax: expect NUMBER, got NUMBER '5' Position1
-    check syntax: expect COMMA, got COMMA ',' Position2
-    check syntax: expect NUMBER, got NUMBER '10' Position4
-    check syntax: expect COMMA, got COMMA ',' Position6
-    check syntax: expect NUMBER, got NUMBER '15' Position8
-    check syntax: expect RPAREN, got RPAREN ')' Position10
-    check syntax: expect SLASH, got SLASH '/' Position11
-    check syntax: expect NUMBER, got NUMBER '3' Position12
-    check syntax: expect EOF, got EOF '' Position13
+    check syntax: expect LPAREN, got LPAREN '(' Position 0
+    check syntax: expect NUMBER, got NUMBER '5' Position 1
+    check syntax: expect COMMA, got COMMA ',' Position 2
+    check syntax: expect NUMBER, got NUMBER '10' Position 4
+    check syntax: expect COMMA, got COMMA ',' Position 6
+    check syntax: expect NUMBER, got NUMBER '15' Position 8
+    check syntax: expect RPAREN, got RPAREN ')' Position 10
+    check syntax: expect SLASH, got SLASH '/' Position 11
+    check syntax: expect NUMBER, got NUMBER '3' Position 12
+    check syntax: expect EOF, got EOF '' Position 13
 ```
 To enable debug mode:
 
