@@ -52,35 +52,29 @@ export class Parser {
     // Expect the division operator '/'
     this.expectToken(TokenType.SLASH, "Expected '/'");
 
-    // Expect 'count' keyword
-    this.expectToken(TokenType.COUNT, "Expected 'count'");
-
-    // Expect opening parenthesis '('
-    this.expectToken(TokenType.LPAREN, "Expected '('");
-
-    // Parse the list inside count function (Divisor).Like parsing [2,3,4]
-    const countList = this.parseListExpr();
-    
-    // Expect closing parenthesis ')'
-    this.expectToken(TokenType.RPAREN, "Expected ')'");
-
-    // CountNode for the AST
-    const rightList = new CountNode(countList);
+    const rightList = [];
+    const rightNumber =this.parseElement();
+    rightList.push(rightNumber);
 
     // Create AST tree
     return new DivisionNode(leftList, rightList);
   }
   
-  // check syntax [2,3,4]
+  // parseNumber() {
+  //   const token = this.expectToken(TokenType.NUMBER, "Expected number");
+  //   return new NumberNode(Number(token.lexeme));
+  // }
+
+  // check syntax (2,3,4)
   parseListExpr() {
-    // Start parsing with the opening bracket '['
-    this.expectToken(TokenType.LBRACK, "Expected '['");
+    // Start parsing with the opening bracket '()'
+    this.expectToken(TokenType.LPAREN, "Expected '('");
 
     const elements = [];
 
-    // Handle empty list: []
-    if (this.peek().type === TokenType.RBRACK) {
-      this.expectToken(TokenType.RBRACK, "Expected ']'");
+    // Handle empty list: ()
+    if (this.peek().type === TokenType.RPAREN) {
+      this.expectToken(TokenType.RPAREN, "Expected ')'");
       return new ListNode(elements);
     }
 
@@ -93,8 +87,8 @@ export class Parser {
       elements.push(this.parseElement());
     }
 
-    // Complete parsing with the closing bracket ']'
-    this.expectToken(TokenType.RBRACK, "Expected ']'");
+    // Complete parsing with the closing bracket ')'
+    this.expectToken(TokenType.RPAREN, "Expected ')'");
     return new ListNode(elements);
   }
 
@@ -102,15 +96,15 @@ export class Parser {
     const token = this.peek();
     // parse and check number
     if (token.type === TokenType.NUMBER) {
-      const t = this.expectToken(TokenType.NUMBER, "Expected integer");
+      const t = this.expectToken(TokenType.NUMBER, "Expected number");
       return new NumberNode(Number(t.lexeme));
     }
 
     // begin parse sublist
     if (token.type === TokenType.LBRACK) {
       return this.parseListExpr();
-    }
+    }        
 
-    throw new SyntaxError("Expected an integer or '['", token.pos);
+    throw new SyntaxError(`Expected number. Found ${token.type} '${token.lexeme}'`, token.pos);
   }
 }

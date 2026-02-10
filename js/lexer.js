@@ -57,6 +57,7 @@ export class Lexer {
   readInteger(startIndex) {
     let text = "";
     let digitCount = 0;
+    const chars = [];
 
     const digitsArray = [];
 
@@ -70,6 +71,54 @@ export class Lexer {
 
     if (digitCount === 0) {
       throw new SemanticError("Invalid integer format", startIndex);
+    }
+
+    let tokenArray = new Token(TokenType.NUMBER, text, startIndex);
+
+    if (this.debug) {
+        this.lexicalCharacterArray.push(digitsArray.join(" "));
+        this.lexicalGroupArray.push(text);
+    }
+
+    return tokenArray;
+  }
+
+  readFloat(startIndex) {
+    let text = "";
+    let digitCount = 0;
+
+    const digitsArray = [];
+
+    while (this.isDigit(this.currentCharacter())) {
+
+      const digit = this.nextCharacter();
+      digitsArray.push(digit);
+      text += digit;
+      digitCount += 1;
+    }
+
+    if (digitCount === 0) {
+      throw new SemanticError("Invalid integer format", startIndex);
+    }
+
+    // check decimal
+    if (this.currentCharacter() === ".") {
+      const dot = this.nextCharacter();
+      digitsArray.push(dot);
+      text += dot;
+
+      let fracDigits = 0;
+      while (this.isDigit(this.currentCharacter())) {
+        const d = this.nextCharacter();
+        digitsArray.push(d);
+        text += d;
+        fracDigits += 1;
+      }
+
+      // require at least 1 digit after '.'
+      if (fracDigits === 0) {
+        throw new SemanticError("Invalid decimal format (missing digits after '.')", startIndex);
+      }
     }
 
     let tokenArray = new Token(TokenType.NUMBER, text, startIndex);
@@ -134,7 +183,7 @@ export class Lexer {
 
     // number (integer only)
     if (this.isDigit(ch)) {
-      return this.readInteger(startIndex);
+      return this.readFloat(startIndex);
     }
 
     // Keywords (sytax is: count)
@@ -149,9 +198,9 @@ export class Lexer {
     }
 
     // reject float dot explicitly (nice message)
-    if (ch === ".") {
-      throw new SemanticError("Float is not allowed (integer only)", startIndex);
-    }
+    // if (ch === ".") {
+    //   throw new SemanticError("Float is not allowed (integer only)", startIndex);
+    // }
 
     throw new SemanticError(`Unexpected character '${ch}'`, startIndex);
   }

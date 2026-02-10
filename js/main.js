@@ -47,25 +47,16 @@ function getSum(nums) {
 }
 
 // Average_Calculator(given_numbers)
-function calculateAverage(nums) {
-  const size = getSize(nums);
-  if (size === 0) throw new Error("List must not be empty.");
-  const sum = getSum(nums);
+function calculateAverage(leftNumbers, rightNumbers) {
+  const size = getSize(leftNumbers);
+  console.log("rightNumbers:", rightNumbers);
+
+  if (size === 0) throw new SemanticError("List must not be empty.");
+  if (size !== rightNumbers[0].value)
+    throw new SemanticError(`Denominator must equal the number of elements (${size})`);
+
+  const sum = getSum(leftNumbers);
   return sum / size;
-}
-
-function isListsEqual(listA, listB) {
-  if (listA.length !== listB.length) {
-    return false;
-  }
-
-  for (let i = 0; i < listA.length; i++) {
-    if (listA[i] !== listB[i]) {
-      return false;
-    }
-  }
-
-  return true;
 }
 
 document.getElementById("runBtn").addEventListener("click", () => {
@@ -80,22 +71,12 @@ document.getElementById("runBtn").addEventListener("click", () => {
     const ast = new Parser(tokens, DEBUG).parseList();
 
     const leftNumbers = evaluateAST(ast.left);        
-    const rightNumbers = evaluateAST(ast.right.list); 
+    const rightNumbers = evaluateAST(ast.right); 
 
-    if (!isListsEqual(leftNumbers, rightNumbers)) {
-        throw new SemanticError("The list provided in count() must match the source list on the left.)");
-        
-    }
-
-    const avg = calculateAverage(leftNumbers);
+    const avg = calculateAverage(leftNumbers, rightNumbers);
 
     outputBox.textContent = `Input: ${code}\nResult: ${avg}`;
 
-    // outputBox.textContent =
-    //   `Input: ${code}\n` +
-    // //   `Size: ${getSize(nums)}\n` +
-    // //   `Sum: ${getSum(nums)}\n` +
-    //   `Average: ${avg}`;
   } catch (e) {
     outputBox.textContent = formatError(e);
   }
