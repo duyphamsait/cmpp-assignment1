@@ -2,23 +2,16 @@
 // The language supports numbers and list delimiters.
 
 export const TokenType = Object.freeze({
-  NUMBER: "NUMBER", // Interger only
-  LBRACK: "LBRACK", // [
-  RBRACK: "RBRACK", // ]
+  NUMBER: "NUMBER", // number
   COMMA: "COMMA",   // ,
   LPAREN: "LPAREN",   // (
   RPAREN: "RPAREN",   // )
   SLASH: "SLASH",
   
-  // Keywords
-  COUNT: "COUNT",
-
   EOF: "EOF",       // end of line
 });
 
 export const DELIMITERS = Object.freeze({
-  "[": TokenType.LBRACK,
-  "]": TokenType.RBRACK,
   ",": TokenType.COMMA,
   "(": TokenType.LPAREN,
   ")": TokenType.RPAREN,

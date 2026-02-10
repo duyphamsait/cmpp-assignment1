@@ -10,7 +10,7 @@ expressions of the form:
 The program computes:
 
 -   Size of the list
--   Sum of all integers
+-   Sum of all numbers
 -   Average value
 
 The implementation follows a compiler-style architecture:
@@ -24,13 +24,7 @@ Analysis → Evaluation → Output
 
 The supported grammar is:
 ```text
- <equation> ::= <expression> “=” <expression>  
- <expression> ::= "(" <list> ")" {<operator> <number>}  
- <list> ::= {<number>} | {“,” {<number>}} | {<decimal>} 
- <decimal> ::= {<int>} | {<int>} “.” {<int>} 
- <int> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"  
- <number> ::= <int> | <decimal> 
- <operator> ::= “/” 
+expression := "(" number { "," number } ")" "/" number
 ```
 Example valid input:
 
@@ -52,7 +46,6 @@ Supported token types:
 -   SLASH (`/`)
 -   LPAREN (`(`)
 -   RPAREN (`)`)
--   COUNT (keyword)
 -   EOF
 
 The lexical analyzer:
@@ -82,12 +75,12 @@ The program constructs an AST using:
 
 -   `NumberNode`
 -   `ListNode`
--   `DivideByCountNode`
+-   `DivisionNode`
 
 The AST clearly separates:
 
--   The left list `() ... )`)
--   The divide operator '\'
+-   The left list `( ... )`
+-   The divide operator '/'
 -   The right number `number`
 
 This ensures correct semantic validation and evaluation.
@@ -98,7 +91,7 @@ This ensures correct semantic validation and evaluation.
 
 After parsing:
 
-1.  All number from both lists are collected using recursion.
+1.  All numbers from the left list are collected using recursion.
 2.  The program verifies that:
     -   The list is not empty.
     -   The denominator (the number after /) equals the number of elements in the left list.
@@ -136,7 +129,7 @@ To enable debug mode:
 ``` javascript
 const DEBUG = true;
 const tokens = new Lexer(code, DEBUG).getAllTokens();
-const result = new Parser(tokens, DEBUG).parse();
+const result = new Parser(tokens, DEBUG).parseList();
 ```
 
 ------------------------------------------------------------------------
@@ -145,11 +138,11 @@ const result = new Parser(tokens, DEBUG).parse();
 
 The program handles:
 
-- Lexical Errors: invalid characters, unknown identifiers/keywords, and invalid number formats (e.g., malformed decimals like 3.).
+- Lexical Errors: invalid characters and invalid number formats.
 
 - Syntax Errors: missing parentheses, missing commas, missing /, missing denominator, and invalid token order.
 
-= Semantic Errors: empty list, invalid denominator, and a denominator that does not match the number of elements in the left list.
+- Semantic Errors: empty list, invalid denominator, and a denominator that does not match the number of elements in the left list.
 
 ------------------------------------------------------------------------
 

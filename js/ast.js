@@ -1,4 +1,4 @@
-// NumberNode represents a single integer value in the list.
+// NumberNode represents a single number value in the list.
 export class NumberNode {
   constructor(value) {
     this.value = value;
@@ -9,12 +9,6 @@ export class NumberNode {
 export class ListNode {
   constructor(elements) {
     this.elements = elements;
-  }
-}
-
-export class CountNode {
-  constructor(list) {
-    this.list = list; 
   }
 }
 

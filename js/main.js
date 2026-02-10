@@ -1,6 +1,6 @@
 import { Lexer } from "./lexer.js";
 import { Parser } from "./parser.js";
-import { NumberNode, ListNode, DivisionNode, CountNode } from "./ast.js";
+import { NumberNode, ListNode, DivisionNode } from "./ast.js";
 import { SemanticError } from "./errors.js";
 
 function formatError(e) {
@@ -8,7 +8,7 @@ function formatError(e) {
   return `${e?.name ?? "Error"}: ${e?.message ?? String(e)}`;
 }
 
-// Use recursion to scan the AST. Get integers from the AST.
+// Use recursion to scan the AST. Get numbers from the AST.
 function evaluateAST(node) {
 if (node instanceof NumberNode) {
     return node.value;
@@ -22,12 +22,9 @@ if (node instanceof NumberNode) {
     return result;
   }
 
-  // right number
-  if (node instanceof CountNode) {
-    const list = evaluateAST(node.list);
-    return getSize(list);
+  if (node instanceof DivisionNode) {
+    return { left: node.left, right: node.right };
   }
-
   return node;
 }
 
@@ -47,12 +44,11 @@ function getSum(nums) {
 }
 
 // Average_Calculator(given_numbers)
-function calculateAverage(leftNumbers, rightNumbers) {
+function calculateAverage(leftNumbers, rightNumber) {
   const size = getSize(leftNumbers);
-  console.log("rightNumbers:", rightNumbers);
 
   if (size === 0) throw new SemanticError("List must not be empty.");
-  if (size !== rightNumbers[0].value)
+  if (size !== rightNumber)
     throw new SemanticError(`Denominator must equal the number of elements (${size})`);
 
   const sum = getSum(leftNumbers);
@@ -71,9 +67,9 @@ document.getElementById("runBtn").addEventListener("click", () => {
     const ast = new Parser(tokens, DEBUG).parseList();
 
     const leftNumbers = evaluateAST(ast.left);        
-    const rightNumbers = evaluateAST(ast.right); 
+    const rightValue  = evaluateAST(ast.right);
 
-    const avg = calculateAverage(leftNumbers, rightNumbers);
+    const avg = calculateAverage(leftNumbers, rightValue);
 
     outputBox.textContent = `Input: ${code}\nResult: ${avg}`;
 

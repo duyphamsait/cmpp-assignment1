@@ -5,7 +5,7 @@
 */
 
 import { Token } from "./token.js";
-import { TokenType, DELIMITERS, KEYWORDS } from "./constants.js";
+import { TokenType, DELIMITERS } from "./constants.js";
 import { SemanticError } from "./errors.js";
 
 // The Lexer reads each character from input string and groups them into token.
@@ -53,36 +53,6 @@ export class Lexer {
     }
   }
 
-  // Only integers are allowed (no float values).
-  readInteger(startIndex) {
-    let text = "";
-    let digitCount = 0;
-    const chars = [];
-
-    const digitsArray = [];
-
-    while (this.isDigit(this.currentCharacter())) {
-
-      const digit = this.nextCharacter();
-      digitsArray.push(digit);
-      text += digit;
-      digitCount += 1;
-    }
-
-    if (digitCount === 0) {
-      throw new SemanticError("Invalid integer format", startIndex);
-    }
-
-    let tokenArray = new Token(TokenType.NUMBER, text, startIndex);
-
-    if (this.debug) {
-        this.lexicalCharacterArray.push(digitsArray.join(" "));
-        this.lexicalGroupArray.push(text);
-    }
-
-    return tokenArray;
-  }
-
   readFloat(startIndex) {
     let text = "";
     let digitCount = 0;
@@ -98,7 +68,7 @@ export class Lexer {
     }
 
     if (digitCount === 0) {
-      throw new SemanticError("Invalid integer format", startIndex);
+      throw new SemanticError("Invalid number format", startIndex);
     }
 
     // check decimal
@@ -131,35 +101,6 @@ export class Lexer {
     return tokenArray;
   }
 
-  readWord(startIndex) {
-    let text = "";
-    const chars = [];
-
-    while (this.isAlpha(this.currentCharacter())) {
-      const c = this.nextCharacter();
-      chars.push(c);
-      text += c;
-    }
-
-    // Convert to lowercase
-    const key = text.toLowerCase();
-
-    // check keyword exists
-    const keywordType = KEYWORDS[key];
-    if (!keywordType) {
-      throw new SemanticError(`Unknown keyword '${text}'`, startIndex);
-    }
-
-    const token = new Token(keywordType, text, startIndex);
-
-    if (this.debug) {
-      this.lexicalCharacterArray.push(chars.join(" "));
-      this.lexicalGroupArray.push(text);
-    }
-
-    return token;
-  }
-
   // Get the next token from the input.
   getNextToken() {
     this.skipSpaces();
@@ -169,7 +110,7 @@ export class Lexer {
 
     if (ch === "\0") return new Token(TokenType.EOF, "", this.position);
 
-    // delimiters: [ ] ,
+    // delimiters: ( ) , 
     if (DELIMITERS[ch] !== undefined) {
       this.nextCharacter();
 
@@ -181,26 +122,10 @@ export class Lexer {
       return new Token(DELIMITERS[ch], ch, startIndex);
     }
 
-    // number (integer only)
+    // number
     if (this.isDigit(ch)) {
       return this.readFloat(startIndex);
     }
-
-    // Keywords (sytax is: count)
-    if (this.isAlpha(ch)) {
-      return this.readWord(startIndex);
-    }
-
-    // division operator
-    if (ch === "/") {
-      this.nextCharacter();
-      return new Token(TokenType.SLASH, "/", startIndex);
-    }
-
-    // reject float dot explicitly (nice message)
-    // if (ch === ".") {
-    //   throw new SemanticError("Float is not allowed (integer only)", startIndex);
-    // }
 
     throw new SemanticError(`Unexpected character '${ch}'`, startIndex);
   }
