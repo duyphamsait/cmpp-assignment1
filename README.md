@@ -114,6 +114,7 @@ After parsing:
 Debug mode prints internal processing steps in the browser console.
 
 Example logs:
+```text
 
 Lexical -> ( | 5 | , | 1 0 | , | 1 5 | ) | / | 3
 Group   -> ( | 5 | , | 10 | , | 15 | ) | / | 3
@@ -129,7 +130,7 @@ Token   -> LPAREN NUMBER COMMA NUMBER COMMA NUMBER RPAREN SLASH NUMBER
     check syntax: expect SLASH, got SLASH '/' Position11
     check syntax: expect NUMBER, got NUMBER '3' Position12
     check syntax: expect EOF, got EOF '' Position13
-
+```
 To enable debug mode:
 
 ``` javascript
