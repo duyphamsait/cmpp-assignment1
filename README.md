@@ -36,7 +36,7 @@ Example valid input:
 **Valid input**
 ![Valid input result](./screenshots/valid.png)
 **Error syntax**
-![Error syntax result](./screenshots/valid.png)
+![Error syntax result](./screenshots/error.png)
 
 ------------------------------------------------------------------------
 
