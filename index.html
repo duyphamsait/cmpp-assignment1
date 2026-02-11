@@ -17,12 +17,13 @@
             <option value="(1.5, 2.5, 3.0, 4)/4">Success: Multiple Decimals</option>
             <option value="(100, 200, 300)/3">Success: Larger Integers</option>
 
-            <option value="()/0">Semantic Error: Empty List</option>
-            <option value="(5, 10, 15)/2">Semantic Error: Denominator Mismatch</option>
-
             <option value="(5, 10, 15)/">Syntax Error: Missing Denominator</option>
             <option value="(5, 10, 15)3">Syntax Error: Missing '/'</option>
             <option value="(5,, 10)/2">Syntax Error: Extra Comma</option>
+
+            <option value="()/0">Semantic Error: Empty List</option>
+            <option value="(5, 10, 15)/2">Semantic Error: Denominator Mismatch</option>
+
             <option value="(5, 10, a)/3">Lexical Error: Unknown Character 'a'</option>
             <option value="(1, 2, 3.)/3">Lexical Error: Bad Decimal '3.'</option>
             <option value="(1, 2, 3)/3.">Lexical Error: Bad Decimal '3.'</option>

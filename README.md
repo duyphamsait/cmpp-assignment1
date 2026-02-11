@@ -18,6 +18,8 @@ The implementation follows a compiler-style architecture:
 Input → Lexical Analysis → Parsing → AST Construction → Semantic
 Analysis → Evaluation → Output
 
+[Live Demo on GitHub Pages](https://duyphamsait.github.io/cmpp-assignment1)
+
 ------------------------------------------------------------------------
 
 ## 2. Language Grammar
