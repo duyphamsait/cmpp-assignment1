@@ -32,9 +32,17 @@ Example valid input:
 
 ------------------------------------------------------------------------
 
-## 3. System Design
+## 3. UI Demo (Screenshots)
+**Valid input**
+![Valid input result](./screenshots/valid.png)
+**Error syntax**
+![Error syntax result](./screenshots/valid.png)
 
-### 3.1 Lexical Analysis
+------------------------------------------------------------------------
+
+## 4. System Design
+
+### 4.1 Lexical Analysis
 
 The Lexer reads the input character-by-character and converts it into
 tokens.
@@ -56,7 +64,7 @@ The lexical analyzer:
 
 ------------------------------------------------------------------------
 
-### 3.2 Parsing (Recursive Descent Parser)
+### 4.2 Parsing (Recursive Descent Parser)
 
 The parser is implemented using recursive descent.
 
@@ -69,7 +77,7 @@ It:
 
 ------------------------------------------------------------------------
 
-### 3.3 Abstract Syntax Tree (AST)
+### 4.3 Abstract Syntax Tree (AST)
 
 The program constructs an AST using:
 
@@ -87,7 +95,7 @@ This ensures correct semantic validation and evaluation.
 
 ------------------------------------------------------------------------
 
-### 3.4 Semantic Analysis
+### 4.4 Semantic Analysis
 
 After parsing:
 
@@ -102,7 +110,7 @@ After parsing:
 
 ------------------------------------------------------------------------
 
-## 4. Debug Mode
+## 5. Debug Mode
 
 Debug mode prints internal processing steps in the browser console.
 
@@ -134,7 +142,7 @@ const result = new Parser(tokens, DEBUG).parseList();
 
 ------------------------------------------------------------------------
 
-## 5. Error Handling
+## 6. Error Handling
 
 The program handles:
 
@@ -146,7 +154,7 @@ The program handles:
 
 ------------------------------------------------------------------------
 
-## 6. References
+## 7. References
 
 1.  GeeksforGeeks. Introduction to Lexical Analysis.\
     https://www.geeksforgeeks.org/compiler-design/introduction-of-lexical-analysis/
